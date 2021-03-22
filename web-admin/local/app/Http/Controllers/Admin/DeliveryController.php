@@ -1,0 +1,117 @@
+<?php namespace App\Http\Controllers\Admin;
+
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Auth;
+use App\Delivery;
+use App\User;
+use DB;
+use Validator;
+use Redirect;
+use IMS;
+class deliveryController extends Controller {
+
+	public $folder  = "admin/delivery.";
+	/*
+	|---------------------------------------
+	|@Showing all records
+	|---------------------------------------
+	*/
+	public function index()
+	{					
+		$res = new Delivery;
+		
+		return View($this->folder.'index',['data' => $res->getAll(),'link' => env('admin').'/delivery/']);
+	}	
+	
+	/*
+	|---------------------------------------
+	|@Add new page
+	|---------------------------------------
+	*/
+	public function show()
+	{								
+		$u = new User;
+
+		return View($this->folder.'add',['data' => new Delivery,'form_url' => env('admin').'/delivery','users' => $u->getAll()]);
+	}
+	
+	/*
+	|---------------------------------------
+	|@Save data in DB
+	|---------------------------------------
+	*/
+	public function store(Request $Request)
+	{			
+		$data = new Delivery;	
+		
+		if($data->validate($Request->all(),'add'))
+		{
+			return redirect::back()->withErrors($data->validate($Request->all(),'add'))->withInput();
+			exit;
+		}
+
+		$data->addNew($Request->all(),"add");
+		
+		return redirect(env('admin').'/delivery')->with('message','Đã thêm thành công.');
+	}
+	
+	/*
+	|---------------------------------------
+	|@Edit Page 
+	|---------------------------------------
+	*/
+	public function edit($id)
+	{				
+		$u = new User;
+		
+		return View($this->folder.'edit',['data' => Delivery::find($id),'form_url' => env('admin').'/delivery/'.$id,'users' => $u->getAll()]);
+	}
+	
+	/*
+	|---------------------------------------
+	|@update data in DB
+	|---------------------------------------
+	*/
+	public function update(Request $Request,$id)
+	{	
+		$data = new Delivery;
+		
+		if($data->validate($Request->all(),$id))
+		{
+			return redirect::back()->withErrors($data->validate($Request->all(),$id))->withInput();
+			exit;
+		}
+
+		$data->addNew($Request->all(),$id);
+		
+		return redirect(env('admin').'/delivery')->with('message','Đã cập nhật thành công.');
+	}
+	
+	/*
+	|---------------------------------------------
+	|@Delete Data
+	|---------------------------------------------
+	*/
+	public function delete($id)
+	{
+		Delivery::where('id',$id)->delete();
+
+		return redirect(env('admin').'/delivery')->with('message','Đã xoá thành công.');
+	}
+
+	/*
+	|---------------------------------------------
+	|@Change Status
+	|---------------------------------------------
+	*/
+	public function status($id)
+	{
+		$res 			= Delivery::find($id);
+		$res->status 	= $res->status == 0 ? 1 : 0;
+		$res->save();
+
+		return redirect(env('admin').'/delivery')->with('message','Đã cập nhật trạng thái thành công.');
+	}
+}

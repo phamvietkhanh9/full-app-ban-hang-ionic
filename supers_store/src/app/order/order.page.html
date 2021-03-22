@@ -1,0 +1,82 @@
+<ion-header>
+    <ion-toolbar color="primary">
+        <ion-buttons slot="start">
+            <ion-back-button></ion-back-button>
+        </ion-buttons>
+        <ion-title>{{ text.order_add }}</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-card mode="ios">
+        <form #form="ngForm" (ngSubmit)="add(form.value)">
+
+            <ion-card-header>
+
+                <ion-card-subtitle>Thông tin khách hàng</ion-card-subtitle>
+
+            </ion-card-header>
+
+            <ion-item>
+                <ion-label position="floating">Số điện thoại</ion-label>
+                <ion-input type="tel" name="phone" [(ngModel)]="phone" required></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="floating">Tên</ion-label>
+                <ion-input type="text" name="name" [(ngModel)]="name" required></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="floating">Địa chỉ</ion-label>
+                <ion-input type="text" name="address" [(ngModel)]="address"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="floating">Sản phẩm</ion-label>
+                <ion-input type="number" name="table_number" ngModel=""></ion-input>
+            </ion-item>
+            <br>
+            <ion-card mode="ios" *ngFor="let item of items">
+                <ion-row style="border-bottom: 1px solid #f9f9f9;padding: 5px 5px">
+                    <ion-col size="4"><b>
+                        <ion-item>
+                            <ion-label position="floating">Sản phẩm</ion-label>
+                            <ion-select name="{{item.id}}_name" ngModel placeholder="Chọn" required>
+                                <ion-select-option *ngFor="let food of this.food"
+                                                   value="{{food.id}}">{{food.name}}</ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                    </b></ion-col>
+                    <ion-col size="4"><b>
+                        <ion-item>
+                            <ion-label position="floating">Loại</ion-label>
+                            <ion-select name="{{item.id}}_type" class="form-control" ngModel placeholder="Chọn" required >
+                                <ion-select-option *ngFor="let food of getType(item.id,form.value)"
+                                                   value="{{food.id}}">{{food.name}}</ion-select-option>
+                            </ion-select>
+                        </ion-item>
+                    </b></ion-col>
+                    <ion-col size="4"><b>
+                        <ion-item>
+                            <ion-label position="floating">Số lượng</ion-label>
+                            <ion-input type="text" name="{{item.id}}_quantity" ngModel required></ion-input>
+                        </ion-item>
+                    </b></ion-col>
+
+                </ion-row>
+                <ion-button style="width: 20%;margin-left: 40%; margin-bottom: 5%" (click)="remove(item.id)">
+                    <ion-icon name="trash"></ion-icon>
+                </ion-button>
+            </ion-card>
+            <ion-button (click)="addItem()" expand="block" mode="ios" style="width: 60%;margin-left: 20%">
+                Thêm sản phẩm
+            </ion-button>
+
+            <ion-button expand="block" mode="ios" type="submit" [disabled]="!form.valid"
+                        style="width: 90%;margin-left: 5%">
+                Cập nhật
+            </ion-button>
+        </form>
+
+    </ion-card>
+
+</ion-content>

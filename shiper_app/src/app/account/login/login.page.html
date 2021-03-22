@@ -1,0 +1,34 @@
+<ion-header no-border>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+<ion-back-button></ion-back-button>
+</ion-buttons>
+    <ion-title>
+     Đăng nhập
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+<!-- <img src="assets/logo.png" style="width: 80%;margin-left: 7%"> -->
+
+<form #form="ngForm" (ngSubmit)="login(form.value)" style="width: 80%;margin-left: 10%">
+
+
+<ion-item>
+  <ion-label position="floating">Số điện thoại</ion-label>
+  <ion-input type="tel" [(ngModel)]="phone" required name="phone"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label position="floating">Mật khẩu</ion-label>
+  <ion-input type="password" [(ngModel)]="password" required name="password"></ion-input>
+</ion-item>
+
+<br><br>
+<ion-button expand="block" mode="ios" type="submit">Đăng nhập</ion-button>
+<p align="center" style="font-size: 14px">Quên mật khẩu <a routerLink="/forgot" routerDirection="forward">Lấy lại mật khẩu</a></p>
+</form>
+
+</ion-content>
